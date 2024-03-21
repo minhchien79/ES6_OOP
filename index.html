@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý học viện</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <h1>Quản lý học viện nghiên cứu & giảng dạy</h1>
+            <form id="personForm">
+                <label for="id">Mã số:</label>
+                <input type="text" id="id" name="id" required><br>
+
+                <label for="fullName">Họ và tên:</label>
+                <input type="text" id="fullName" name="fullName" required><br>
+
+                <label for="address">Địa chỉ:</label>
+                <input type="text" id="address" name="address" required><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br>
+
+                <label for="type">Loại người dùng:</label>
+                <select id="type" name="type" required>
+                    <option value="student">Học viên</option>
+                    <option value="employee">Nhân viên</option>
+                    <option value="customer">Khách hàng</option>
+                </select><br>
+
+                <div id="studentFields" class="userFields">
+                    <label for="math">Điểm Toán:</label>
+                    <input type="number" id="math" name="math" min="0" max="10" step="0.1"><br>
+
+                    <label for="physics">Điểm Lý:</label>
+                    <input type="number" id="physics" name="physics" min="0" max="10" step="0.1"><br>
+
+                    <label for="chemistry">Điểm Hóa:</label>
+                    <input type="number" id="chemistry" name="chemistry" min="0" max="10" step="0.1"><br>
+                </div>
+
+                <div id="employeeFields" class="userFields">
+                    <label for="workDays">Số ngày làm việc:</label>
+                    <input type="number" id="workDays" name="workDays" min="0"><br>
+
+                    <label for="dailySalary">Lương theo ngày:</label>
+                    <input type="number" id="dailySalary" name="dailySalary" min="0"><br>
+                </div>
+
+                <div id="customerFields" class="userFields">
+                    <label for="companyName">Tên công ty:</label>
+                    <input type="text" id="companyName" name="companyName"><br>
+
+                    <label for="orderValue">Trị giá hóa đơn:</label>
+                    <input type="number" id="orderValue" name="orderValue" min="0"><br>
+
+                    <label for="rating">Đánh giá:</label>
+                    <input type="number" id="rating" name="rating" min="0" max="5" step="0.1"><br>
+                </div>
+
+                <button id="submitButton" type="submit">Thêm người dùng</button>
+                <button id="updateButton" type="button">Cập nhật</button>
+
+            </form>
+            <button style="margin: 5px 0;" id="filterButton" type="button">Lọc danh sách người dùng</button>
+
+            <select id="filterType">
+                <option value="student">Học viên</option>
+                <option value="employee">Nhân viên</option>
+                <option value="customer">Khách hàng</option></select>
+        </div>
+        <div id="output">
+            <!-- Kết quả sẽ được hiển thị ở đây -->
+        </div>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+  
+</body>
+
+</html>
