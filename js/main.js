@@ -1,71 +1,56 @@
-// Định nghĩa lớp Person
-class Person {
-  constructor(id, fullName, address, email) {
-    this.id = id;
-    this.fullName = fullName;
-    this.address = address;
-    this.email = email;
+import Person from "./person.js";
+import Student from "./student.js";
+import Employee from "./employee.js";
+import Customer from "./customer.js";
+
+
+function resetForm() {
+  document.getElementById("id").value = "";
+  document.getElementById("fullName").value = "";
+  document.getElementById("address").value = "";
+  document.getElementById("email").value = "";
+
+  const type = document.getElementById("type").value;
+  if (type === "student") {
+    document.getElementById("math").value = "";
+    document.getElementById("physics").value = "";
+    document.getElementById("chemistry").value = "";
+  } else if (type === "employee") {
+    document.getElementById("workDays").value = "";
+    document.getElementById("dailySalary").value = "";
+  } else if (type === "customer") {
+    document.getElementById("companyName").value = "";
+    document.getElementById("orderValue").value = "";
+    document.getElementById("rating").value = "";
   }
+
+  const studentFields = document.getElementById("studentFields");
+  const employeeFields = document.getElementById("employeeFields");
+  const customerFields = document.getElementById("customerFields");
+
+  studentFields.style.display = "none";
+  employeeFields.style.display = "none";
+  customerFields.style.display = "none";
 }
 
-// Lớp Student kế thừa từ lớp Person
-class Student extends Person {
-  constructor(id, fullName, address, email, math, physics, chemistry) {
-    super(id, fullName, address, email);
-    this.math = math;
-    this.physics = physics;
-    this.chemistry = chemistry;
-  }
-
-  // Phương thức tính điểm trung bình
-  getAverageScore() {
-    return (this.math + this.physics + this.chemistry) / 3;
-  }
-}
-
-// Lớp Employee kế thừa từ lớp Person
-class Employee extends Person {
-  constructor(id, fullName, address, email, workDays, dailySalary) {
-    super(id, fullName, address, email);
-    this.workDays = workDays;
-    this.dailySalary = dailySalary;
-  }
-
-  // Phương thức tính lương
-  calculateSalary() {
-    return this.workDays * this.dailySalary;
-  }
-}
-
-// Lớp Customer kế thừa từ lớp Person
-class Customer extends Person {
-  constructor(id, fullName, address, email, companyName, orderValue, rating) {
-    super(id, fullName, address, email);
-    this.companyName = companyName;
-    this.orderValue = orderValue;
-    this.rating = rating;
-  }
-}
 
 // Lớp ListPerson để quản lý danh sách người dùng
 class ListPerson {
   constructor() {
     this.persons = [];
-    this.loadPersons();
   }
 
   addPerson(person) {
     this.persons.push(person);
-    this.savePersons();
-    this.displayPersons(); 
+    this.displayPersons();
   }
 
   // Phương thức hiển thị danh sách người dùng trên trang web
   displayPersons(filteredPersons) {
     const outputDiv = document.getElementById("output");
-    outputDiv.innerHTML = ""; 
+    outputDiv.innerHTML = "";
 
-    const personsToDisplay = filteredPersons || this.persons; 
+    const personsToDisplay = filteredPersons || this.persons;
 
     if (!personsToDisplay.length) {
       outputDiv.innerHTML = "<p>Không có người dùng nào.</p>";
@@ -120,7 +105,6 @@ class ListPerson {
     });
 
     outputDiv.appendChild(table);
-    this.savePersons();
   }
 
   // Phương thức sắp xếp danh sách theo thứ tự họ tên
@@ -140,20 +124,7 @@ class ListPerson {
 
   deletePerson(id) {
     this.persons = this.persons.filter((person) => person.id !== id);
-    this.displayPersons(); 
-    this.savePersons();
-  }
-
-  // Phương thức lưu trữ danh sách người dùng vào localStorage
-  savePersons() {
-    localStorage.setItem("persons", JSON.stringify(this.persons));
-  }
-
-  // Phương thức khôi phục danh sách người dùng từ localStorage
-  loadPersons() {
-    const storedPersons = localStorage.getItem("persons");
-    this.persons = storedPersons ? JSON.parse(storedPersons) : [];
-    this.displayPersons(); 
+    this.displayPersons();
   }
 
 
@@ -173,7 +144,6 @@ class ListPerson {
 }
 
 const listPerson = new ListPerson(); // Khởi tạo đối tượng ListPerson
-
 
 document.getElementById("updateButton").addEventListener("click", function () {
   // Lấy thông tin người dùng từ biểu mẫu
@@ -209,7 +179,9 @@ document.getElementById("updateButton").addEventListener("click", function () {
   if (type === "student") {
     const math = parseFloat(document.getElementById("math").value.trim());
     const physics = parseFloat(document.getElementById("physics").value.trim());
-    const chemistry = parseFloat(document.getElementById("chemistry").value.trim());
+    const chemistry = parseFloat(
+      document.getElementById("chemistry").value.trim()
+    );
 
     if (isNaN(math) || isNaN(physics) || isNaN(chemistry)) {
       errorMessage += "Vui lòng nhập điểm số hợp lệ cho học viên.\n";
@@ -217,18 +189,24 @@ document.getElementById("updateButton").addEventListener("click", function () {
     }
   } else if (type === "employee") {
     const workDays = parseInt(document.getElementById("workDays").value.trim());
-    const dailySalary = parseInt(document.getElementById("dailySalary").value.trim());
+    const dailySalary = parseInt(
+      document.getElementById("dailySalary").value.trim()
+    );
 
     if (isNaN(workDays) || isNaN(dailySalary)) {
-      errorMessage += "Vui lòng nhập số ngày làm việc và lương hợp lệ cho nhân viên.\n";
+      errorMessage +=
+        "Vui lòng nhập số ngày làm việc và lương hợp lệ cho nhân viên.\n";
       isValid = false;
     }
   } else if (type === "customer") {
-    const orderValue = parseInt(document.getElementById("orderValue").value.trim());
+    const orderValue = parseInt(
+      document.getElementById("orderValue").value.trim()
+    );
     const rating = parseFloat(document.getElementById("rating").value.trim());
 
     if (isNaN(orderValue) || isNaN(rating) || rating < 0 || rating > 5) {
-      errorMessage += "Vui lòng nhập trị giá hóa đơn và đánh giá hợp lệ cho khách hàng.\n";
+      errorMessage +=
+        "Vui lòng nhập trị giá hóa đơn và đánh giá hợp lệ cho khách hàng.\n";
       isValid = false;
     }
   }
@@ -250,19 +228,29 @@ document.getElementById("updateButton").addEventListener("click", function () {
     // Cập nhật thông tin phụ thuộc vào loại người dùng
     if (type === "student") {
       const math = parseFloat(document.getElementById("math").value.trim());
-      const physics = parseFloat(document.getElementById("physics").value.trim());
-      const chemistry = parseFloat(document.getElementById("chemistry").value.trim());
+      const physics = parseFloat(
+        document.getElementById("physics").value.trim()
+      );
+      const chemistry = parseFloat(
+        document.getElementById("chemistry").value.trim()
+      );
       person.math = math;
       person.physics = physics;
       person.chemistry = chemistry;
     } else if (type === "employee") {
-      const workDays = parseInt(document.getElementById("workDays").value.trim());
-      const dailySalary = parseInt(document.getElementById("dailySalary").value.trim());
+      const workDays = parseInt(
+        document.getElementById("workDays").value.trim()
+      );
+      const dailySalary = parseInt(
+        document.getElementById("dailySalary").value.trim()
+      );
       person.workDays = workDays;
       person.dailySalary = dailySalary;
     } else if (type === "customer") {
       const companyName = document.getElementById("companyName").value.trim();
-      const orderValue = parseInt(document.getElementById("orderValue").value.trim());
+      const orderValue = parseInt(
+        document.getElementById("orderValue").value.trim()
+      );
       const rating = parseFloat(document.getElementById("rating").value.trim());
       person.companyName = companyName;
       person.orderValue = orderValue;
@@ -300,15 +288,24 @@ document.getElementById("output").addEventListener("click", function (event) {
         document.getElementById("math").value = personToEdit.math;
         document.getElementById("physics").value = personToEdit.physics;
         document.getElementById("chemistry").value = personToEdit.chemistry;
+        document.getElementById("studentFields").style.display = "block";
+        document.getElementById("employeeFields").style.display = "none";
+        document.getElementById("customerFields").style.display = "none";
       } else if (personToEdit instanceof Employee) {
         document.getElementById("type").value = "employee";
         document.getElementById("workDays").value = personToEdit.workDays;
         document.getElementById("dailySalary").value = personToEdit.dailySalary;
+        document.getElementById("studentFields").style.display = "none";
+        document.getElementById("employeeFields").style.display = "block";
+        document.getElementById("customerFields").style.display = "none";
       } else if (personToEdit instanceof Customer) {
         document.getElementById("type").value = "customer";
         document.getElementById("companyName").value = personToEdit.companyName;
         document.getElementById("orderValue").value = personToEdit.orderValue;
         document.getElementById("rating").value = personToEdit.rating;
+        document.getElementById("studentFields").style.display = "none";
+        document.getElementById("employeeFields").style.display = "none";
+        document.getElementById("customerFields").style.display = "block";
       }
 
       // Đổi nút "Thêm" thành nút "Cập nhật" và hiển thị nút "Cập nhật"
@@ -316,8 +313,7 @@ document.getElementById("output").addEventListener("click", function (event) {
       document.getElementById("updateButton").style.display = "block";
     }
   }
-})
-
+});
 
 document.getElementById("filterButton").addEventListener("click", function () {
   const selectedType = document.getElementById("filterType").value;
@@ -488,28 +484,4 @@ document.getElementById("type").addEventListener("change", function () {
   }
 });
 
-// Hàm reset trang web sau khi thêm người dùng
-function resetForm() {
-  // Xóa nội dung của các trường nhập liệu
-  document.getElementById("id").value = "";
-  document.getElementById("fullName").value = "";
-  document.getElementById("address").value = "";
-  document.getElementById("email").value = "";
-  document.getElementById("math").value = "";
-  document.getElementById("physics").value = "";
-  document.getElementById("chemistry").value = "";
-  document.getElementById("workDays").value = "";
-  document.getElementById("dailySalary").value = "";
-  document.getElementById("companyName").value = "";
-  document.getElementById("orderValue").value = "";
-  document.getElementById("rating").value = "";
 
-  // Thiết lập lại các trường nhập liệu phụ thuộc vào loại người dùng
-  const studentFields = document.getElementById("studentFields");
-  const employeeFields = document.getElementById("employeeFields");
-  const customerFields = document.getElementById("customerFields");
-
-  studentFields.style.display = "none";
-  employeeFields.style.display = "none";
-  customerFields.style.display = "none";
-}
